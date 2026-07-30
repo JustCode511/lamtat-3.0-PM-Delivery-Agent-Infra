@@ -1,0 +1,32 @@
+# ── Terraform ────────────────────────────────────────────────
+# Local state can contain SECRETS in plaintext (SSM values, tokens) — never commit.
+*.tfstate
+*.tfstate.*
+.terraform/
+crash.log
+crash.*.log
+
+# Variable files may hold secrets — commit only the .example
+*.tfvars
+*.tfvars.json
+!*.tfvars.example
+
+# Provider override files
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+.terraformrc
+terraform.rc
+
+# NOTE: .terraform.lock.hcl IS committed on purpose (locks provider versions).
+
+# ── Lambda build artifacts ───────────────────────────────────
+build/
+dist/
+*.zip
+
+# ── OS / editor ──────────────────────────────────────────────
+.DS_Store
+.vscode/
+.idea/

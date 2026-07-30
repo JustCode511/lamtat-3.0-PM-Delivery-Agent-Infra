@@ -1,0 +1,9 @@
+# Copy to terraform.tfvars and adjust. terraform.tfvars is gitignored (may hold secrets).
+aws_region          = "ap-southeast-1"
+project_name        = "pm-agent"
+environment         = "demo"
+# Confirm the exact Sonnet APAC profile ID: aws bedrock list-inference-profiles --region ap-southeast-1
+bedrock_model_id    = "apac.anthropic.claude-sonnet-4-6-v1:0"
+lambda_architecture = "arm64"
+log_retention_days  = 7
+allowed_origins     = ["http://localhost:5173"]
