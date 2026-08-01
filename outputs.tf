@@ -5,6 +5,7 @@ output "dynamodb_tables" {
     users          = aws_dynamodb_table.users.name
     revoked_tokens = aws_dynamodb_table.revoked_tokens.name
     conversations  = aws_dynamodb_table.conversations.name
+    memory         = aws_dynamodb_table.memory.name
   }
 }
 

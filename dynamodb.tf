@@ -53,6 +53,19 @@ resource "aws_dynamodb_table" "revoked_tokens" {
   }
 }
 
+# Durable long-term memory: rolling session summaries + cross-session user facts.
+# Single table keyed by a prefixed pk (summary#<session_id> / user#<user_id>).
+resource "aws_dynamodb_table" "memory" {
+  name         = "pm_memory"
+  billing_mode = "PAY_PER_REQUEST"
+  hash_key     = "pk"
+
+  attribute {
+    name = "pk"
+    type = "S"
+  }
+}
+
 # Permanent conversation archive for the history sidebar.
 # GSI "user_id-index" powers list_conversations(user_id).
 resource "aws_dynamodb_table" "conversations" {
