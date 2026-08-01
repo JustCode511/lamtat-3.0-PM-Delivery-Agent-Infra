@@ -7,3 +7,8 @@ output "dynamodb_tables" {
     conversations  = aws_dynamodb_table.conversations.name
   }
 }
+
+output "ssm_param_prefix" {
+  description = "SSM path prefix the Lambda reads its secrets from (set as SSM_PARAM_PREFIX on the Lambda)."
+  value       = local.ssm_prefix
+}

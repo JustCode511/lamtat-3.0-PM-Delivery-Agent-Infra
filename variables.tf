@@ -49,3 +49,15 @@ variable "allowed_origins" {
   type        = list(string)
   default     = ["http://localhost:5173"]
 }
+
+# ── Secrets ──────────────────────────────────────────────────
+variable "app_secrets" {
+  description = <<-EOT
+    Backend secrets pushed to SSM SecureString (Jira + Slack). Put REAL values in
+    a gitignored terraform.tfvars — never commit them. Each key becomes an env var
+    name inside the Lambda (e.g. JIRA_API_TOKEN). Do NOT include JWT_SECRET here —
+    it is generated automatically.
+  EOT
+  type        = map(string)
+  default     = {}
+}
