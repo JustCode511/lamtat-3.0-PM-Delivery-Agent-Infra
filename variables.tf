@@ -43,6 +43,36 @@ variable "log_retention_days" {
   default     = 7
 }
 
+variable "lambda_memory" {
+  description = "Lambda memory in MB (more memory = more CPU = faster orchestration + cold start)."
+  type        = number
+  default     = 1536
+}
+
+variable "lambda_timeout" {
+  description = "Lambda timeout in seconds. The async chat endpoint runs the agent to completion here (the client polls for the result), so this is the true ceiling for a report's total time — set to 300s (5 min) so even a detailed all-projects report finishes and is saved before the Lambda is killed."
+  type        = number
+  default     = 300
+}
+
+variable "cloudfront_price_class" {
+  description = "CloudFront price class. PriceClass_200 includes Asia edge locations (better for an APAC demo); still $0 at demo volume."
+  type        = string
+  default     = "PriceClass_200"
+}
+
+variable "frontend_bucket_name" {
+  description = "Existing S3 bucket to reuse for the frontend. Empty = create a new one. If set to an existing bucket, `terraform import` it first (a bucket that already exists can't be created)."
+  type        = string
+  default     = ""
+}
+
+variable "public_api_base" {
+  description = "Public base URL the backend uses to build absolute links (e.g. PPT downloads). After CloudFront exists, set to https://<cloudfront-domain>/api and re-apply. Empty = fall back to the raw API Gateway URL."
+  type        = string
+  default     = ""
+}
+
 # ── CORS ─────────────────────────────────────────────────────
 variable "allowed_origins" {
   description = "Origins allowed to call the API (the CloudFront URL is added after the frontend is deployed)."

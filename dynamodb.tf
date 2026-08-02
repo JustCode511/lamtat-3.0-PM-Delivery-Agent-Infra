@@ -66,6 +66,24 @@ resource "aws_dynamodb_table" "memory" {
   }
 }
 
+# Async chat jobs (poll-for-result) — lets a >30s report outlive API Gateway's
+# hard 30s client timeout. Auto-expires via TTL "ttl" (~1h).
+resource "aws_dynamodb_table" "jobs" {
+  name         = "pm_jobs"
+  billing_mode = "PAY_PER_REQUEST"
+  hash_key     = "job_id"
+
+  attribute {
+    name = "job_id"
+    type = "S"
+  }
+
+  ttl {
+    attribute_name = "ttl"
+    enabled        = true
+  }
+}
+
 # Permanent conversation archive for the history sidebar.
 # GSI "user_id-index" powers list_conversations(user_id).
 resource "aws_dynamodb_table" "conversations" {
