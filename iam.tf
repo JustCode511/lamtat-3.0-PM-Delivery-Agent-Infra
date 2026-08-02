@@ -67,6 +67,29 @@ data "aws_iam_policy_document" "lambda_perms" {
     resources = ["arn:aws:lambda:${var.aws_region}:${data.aws_caller_identity.current.account_id}:function:${var.project_name}-${var.environment}"]
   }
 
+  # FinOps dashboard — READ-ONLY cost/usage reporting APIs. None of these support
+  # resource-level scoping (they're account-wide report calls), so resource = "*".
+  # ⚠️ Cost Explorer (ce:*) is billed ~$0.01 per request and the FinOps dashboard
+  # fires several per load — this is a deliberate, cost-incurring enablement.
+  statement {
+    sid = "FinOpsReadOnly"
+    actions = [
+      "ce:GetCostAndUsage",
+      "ce:GetCostForecast",
+      "ce:GetDimensionValues",
+      "ce:GetAnomalies",
+      "ce:GetAnomalyMonitors",
+      "budgets:ViewBudget",
+      "budgets:DescribeBudgets",
+      "compute-optimizer:GetEC2InstanceRecommendations",
+      "compute-optimizer:GetEnrollmentStatus",
+      "ec2:DescribeInstances",
+      "ec2:DescribeVolumes",
+      "sts:GetCallerIdentity",
+    ]
+    resources = ["*"]
+  }
+
   # SSM — read the app secrets. GetParametersByPath authorizes against the PATH
   # node itself (…:parameter/pm-agent/demo); GetParameter authorizes each child
   # (…/pm-agent/demo/*). Grant both.
